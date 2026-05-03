@@ -1,0 +1,136 @@
+package DesafiosJavaBasico;
+
+import java.util.Scanner;
+
+public class Carro {
+
+    public static void main(String[] args) {
+        /* 01. Carro
+        Crie uma classe Carro, com variáveis que controlem o movimento (velocidade),
+        na classe deverá ter um menu para controle do carro, em que cada opção do menu terá
+        um método para controle do estado atual do carro. Métodos como aumentar velocidade,
+        diminuir velocidade, buzinar, parar e arrancar, cada método contendo suas validações
+        lógicas, por exemplo, não será possível parar um carro que já está parado. */
+
+        Scanner scanner = new Scanner(System.in);
+        int painel;
+        double velocidade = 0;
+        boolean estaLigado = false; // para verificar se está ligado ou não
+
+        do {
+            System.out.println("========= PAINEL CARRO INTELIGENTE =========");
+            System.out.println("1. Dar partida "); // arrancar
+            System.out.println("2. Parar o carro");
+            System.out.println("3. Acelerar ");
+            System.out.println("4. Diminuir velocidade");
+            System.out.println("5. Buzinar");
+            System.out.println("6. Desligar o carro");
+            System.out.print("Selecione uma opção: ");
+
+            painel = scanner.nextInt();
+
+            switch (painel) {
+                case 1:
+                    estaLigado = darPartida(estaLigado);
+                    break;
+                case 2:
+                    estaLigado = pararCarro(estaLigado, velocidade);
+                    break;
+                case 3:
+                    velocidade = acelerarCarro(estaLigado, velocidade);
+                    break;
+                case 4:
+                    velocidade = diminuirVelocidade(estaLigado, velocidade);
+                    break;
+                case 5:
+                    buzina(estaLigado);
+                    break;
+                case 6:
+                   estaLigado = desligaCarro(estaLigado, velocidade);
+                    break;
+                default:
+                    System.out.println("Opção inválida. Selecione uma opção válida.");
+            }
+        } while (painel != 6);
+
+        scanner.close();
+    }
+
+    // --- MÉTODOS ESTÁTICOS ---
+
+    public static boolean darPartida(boolean ligar) {
+        if (!ligar) { // se o carro está paradp
+            ligar = true; // ligar
+            System.out.println("\nō͡≡o Você deu partida!\n");
+        } else {
+            System.out.println("\nO carro já está ligado.\n");
+        }
+        return ligar;
+    }
+
+    public static boolean pararCarro(boolean ligado, double velocidade) {
+    if(ligado){
+        if (velocidade > 0 && velocidade<= 30) {// se o carro estiver ligado
+            velocidade = 0;
+            System.out.println("\n  ō͡≡o Você parou carro.\n");
+        } else if (velocidade> 30) {
+            System.out.println("\nDesacelere antes de parar!\n");
+        } else{
+            System.out.println("\n O carro já está parado \n");
+        }
+    }
+        return ligado;
+        }
+
+        public static double acelerarCarro(boolean ligado,double velocidade){
+            if (ligado) { // se o carro estiver ligado e menos de 180km/h
+                if(velocidade < 180){
+                    velocidade += 10; // acelera de 10 em 10km/h
+                    System.out.printf("\n ───==≡≡ ō͡≡o  Acelerando Vrummm, sua velocidade atual é %.2f Km/h%n\n", velocidade);
+                }else{
+                    System.out.println("\nLimite de velocidade seguro atingido.\n");
+                }
+              } else{
+                System.out.println("\nO carro está parado, arranque para acelerar.\n");
+                }
+            return velocidade;
+        }
+
+        public static double diminuirVelocidade ( boolean ligado, double velocidade) {
+            if (ligado) {
+                if (velocidade >= 10) {
+                    velocidade = 0;
+
+                    System.out.printf("\n Desacelerando... Velocidade atual: %.2f Km/h%n\n", velocidade);
+                } else {
+                    System.out.println("\nO carro já está parado.\n");
+                }
+                    }
+                    return velocidade;
+                }
+
+        public static void buzina(boolean ligado){
+        if(ligado){
+            System.out.println("\n BII BIII! \n");
+        }else{
+            System.out.println("Ligue o carro para buzinar");
+        }
+        }
+
+        public static boolean desligaCarro(boolean estaLigado ,double velocidade){
+        if(estaLigado){
+            if (velocidade > 0){
+                System.out.println("Pare o carro antes de desligar");
+            }else{
+                estaLigado = false;
+                System.out.println("Desligando ...");
+            }
+        }else{
+            System.out.println("O carro ainda está desligado.");
+        }
+        return estaLigado;
+    }
+
+
+
+}//fim classe carro
