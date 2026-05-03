@@ -1,0 +1,181 @@
+package DesafiosJavaBasico;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Mercado {
+    static Scanner scanner = new Scanner(System.in);
+
+    static ArrayList<String> nomeProdutos = new ArrayList<>();
+    static ArrayList<Integer> qtdProdutos = new ArrayList<>();
+    static ArrayList<Double> valorProdutos = new ArrayList<>();
+
+    public static void main(String[] args) {
+        int menu;
+
+        do {
+            System.out.println("====== APP MERCADO ======");
+            System.out.println("1. Adicionar um item.");
+            System.out.println("2. Consultar carrinho.");
+            System.out.println("3. Excluir item.");
+            System.out.println("4. Alterar quantidade de produtos.");
+            System.out.println("5. Finalizar a compra.");
+            menu = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (menu) {
+                case 1:
+                    adicionaItem();
+                    break;
+                case 2:
+                    consultaCarrinho();
+                    break;
+                case 3:
+                    excluiProduto();
+                    break;
+                case 4:
+                    alteraQtdProduto();
+                    break;
+                case 5:
+                    consultaCarrinho();
+                    finalizarCompra();
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+            }
+        } while(menu != 5);
+    }
+
+    public static void adicionaItem() {
+        System.out.println("Digite o nome do produto: ");
+        scanner.nextLine();
+        String produto = scanner.nextLine().toLowerCase();
+        nomeProdutos.add(produto);
+
+        System.out.println("Digite a quantidade do produto: ");
+        int quantidade = scanner.nextInt();
+        scanner.nextLine();
+
+        if(quantidade > 0) {
+            qtdProdutos.add(quantidade);
+        } else {
+            System.out.println("Quantidade inválida");
+            return;
+        }
+
+        System.out.println("Digite o valor do produto: ");
+        double valor = scanner.nextDouble();
+        scanner.nextLine();
+
+        if(valor > 0) {
+            valorProdutos.add(valor);
+            System.out.println("Produto adicionado.");
+        } else {
+            System.out.println("Valor inválido.");
+            nomeProdutos.remove(nomeProdutos.size() - 1);
+            qtdProdutos.remove(qtdProdutos.size() - 1);
+        }
+    }
+
+    public static void consultaCarrinho(){
+        System.out.println("--------- CARRINHO ----------");
+        double total = 0;
+
+        if(nomeProdutos.isEmpty()) {
+            System.out.println("Carrinho vazio!");
+            return;
+        }
+
+        for(int i = 0; i < nomeProdutos.size(); i++) {
+            String nome = nomeProdutos.get(i);
+            int qtd = qtdProdutos.get(i);
+            double valorUnit = valorProdutos.get(i);
+            double subtotal = qtd * valorUnit;
+            total += subtotal;
+
+            System.out.printf("%-12s x%-2d  R$%6.2f  (R$%7.2f)\n",
+                    nome, qtd, valorUnit, subtotal);
+        }
+        System.out.println("---------------------------");
+        System.out.printf("TOTAL:           R$%8.2f\n", total);
+    }
+
+    public static void excluiProduto() {
+        System.out.println("Digite o produto que deseja excluir: ");
+        scanner.nextLine();
+        String produto = scanner.nextLine().toLowerCase();
+
+        int indice = nomeProdutos.indexOf(produto);
+
+        if(indice != -1) {
+            nomeProdutos.remove(indice);
+            qtdProdutos.remove(indice);
+            valorProdutos.remove(indice);
+            System.out.println("Produto excluído!");
+        } else {
+            System.out.println("Produto não encontrado.");
+        }
+    }
+
+    public static void alteraQtdProduto(){
+        System.out.println("Digite o produto que deseja mudar a quantidade: ");
+        scanner.nextLine();
+        String produto = scanner.nextLine().toLowerCase();
+
+        System.out.println("Digite a nova quantidade:");
+        int quantidade = scanner.nextInt();
+        scanner.nextLine();
+
+        int indice = nomeProdutos.indexOf(produto);
+
+        if(indice != -1) {
+            if(quantidade > 0) {
+                qtdProdutos.set(indice, quantidade);
+                System.out.println("Quantidade alterada!");
+            } else {
+                System.out.println("Quantidade inválida!");
+            }
+        } else {
+            System.out.println("Produto não encontrado.");
+        }
+    }
+
+    public static void finalizarCompra(){
+        if(valorProdutos.isEmpty()) {
+            System.out.println("Carrinho vazio!");
+            return;
+        }
+
+        double total = 0;
+        for(int i = 0; i < valorProdutos.size(); i++) {
+            total += valorProdutos.get(i) * qtdProdutos.get(i);
+        }
+
+        System.out.printf("Total da compra: R$%.2f\n", total);
+        System.out.println("Forma de pagamento:");
+        System.out.println("1. À vista (dinheiro/pix) - 5% OFF");
+        System.out.println("2. Cartão da loja - 7% OFF");
+
+        int opcaoPagamento = scanner.nextInt();
+        scanner.nextLine();
+
+        double valorFinal;
+        switch (opcaoPagamento) {
+            case 1:
+                valorFinal = total * 0.95;
+                System.out.printf("Desconto 5%%: R$%.2f\n", total * 0.05);
+                break;
+            case 2:
+                valorFinal = total * 0.93;
+                System.out.printf("Desconto 7%%: R$%.2f\n", total * 0.07);
+                break;
+            default:
+                System.out.println("Opção inválida!");
+                return;
+        }
+
+        System.out.printf("A PAGAR: R$%.2f\n", valorFinal);
+        System.out.println("Compra finalizada! Obrigada!");
+        scanner.close();
+    }
+}
