@@ -1,0 +1,142 @@
+package DesafiosJavaBasico;
+
+import java.util.Scanner;
+
+public class Tv {
+    static Scanner scanner = new Scanner(System.in);
+
+    static void main() {
+//        Faça um programa para controlar uma televisão, em que terá opções para
+//        ligar e desligar a televisão, alterar o volume e canal ou para alterar
+//        para um canal específico e mutar. Na classe deverá ter um menu para controlar
+//        o estado de cada variável e cada opção do menu deverá chamar um método
+//        para realizar a ação. Os métodos devem conter as validações lógicas,
+//                exemplo, não é possível desligar uma televisão já desligada.
+        int controle;
+        boolean ligaDesliga = false; // tv desligada
+        int volume = 0;
+        int canal = 0;
+        do {
+            System.out.println("1. Ligar TV"); //verificar se o mesmo botão pode lisgar/desligar
+            System.out.println("2. Desligar TV");
+            System.out.println("3. Volume +");
+            System.out.println("4. Volume -");
+            System.out.println("5. Mute");
+            System.out.println("6. Canais");
+            controle = scanner.nextInt();
+
+            switch (controle) {
+                case 1:
+                    ligaDesliga = ligaTv(ligaDesliga);
+                    break;
+                case 2:
+                    ligaDesliga = desligaTv(ligaDesliga);
+                    break;
+                case 3:
+                    volume = aumentaVolume(volume, ligaDesliga);
+                    break;
+                case 4:
+                    volume = diminuiVolume(volume, ligaDesliga);
+                    break;
+                case 5:
+                    volume = mutarTv(volume,ligaDesliga);
+                    break;
+                case 6:
+                    canal = canaisTv(canal,ligaDesliga);
+                    break;
+                default:
+                    System.out.println("Inválido.");
+
+            }
+        }while (controle != 2) ;
+    }
+    //----------- Metodos
+    // =========== LIGAR TV =============
+    public static boolean ligaTv(boolean ligaDesliga){
+        //se tv desligada
+        if(!ligaDesliga){
+            ligaDesliga = true; //liga tv
+
+            System.out.println("\nLigando...\n");
+        }else {
+            System.out.println("\nTV já esta ligada.");
+        }
+        return ligaDesliga;
+    }
+
+    public static boolean desligaTv(boolean ligaDesliga){
+        if (ligaDesliga){ //se tv ligada
+            ligaDesliga = false;
+            System.out.println("\nDesligando...\n");
+        }else{
+            System.out.println("Tv já está desligada");
+        }
+        return ligaDesliga;
+    }
+
+    public static int aumentaVolume(int volume, boolean ligada){
+        if(ligada){//verifica se tv esta ligada para aumentar volume
+            if(volume <= 100){//volume maximo é 100
+                volume += 5;
+                System.out.println("Volume +: "+volume);
+            }else{
+                System.out.println("Volume máximo atingido.");
+            }
+        }else {
+            System.out.println("tv desligada");
+        }
+       return volume;
+    }
+    public static int diminuiVolume(int volume, boolean ligada){
+        if(ligada){//verifica se tv esta ligada para abaixar volume
+            if(volume >=5){//volume minimo para diminuir
+                volume -= 5;
+                System.out.println("Volume -: "+volume);
+            }else{
+                System.out.println("Volume 0");
+            }
+        }
+        else {
+            System.out.println("tv desligada");
+        }
+        return volume;
+    }
+    public static int mutarTv(int volume, boolean ligada){
+        if (ligada) {
+            volume = 0;
+            System.out.println("TV Mutada");
+        }else {
+            System.out.println("tv desligada");
+        }
+        return volume;
+    }
+
+    public static int canaisTv(int canal, boolean ligada){
+        if(ligada){
+            System.out.println("Digite o canal [1-5]");
+            canal = scanner.nextInt();
+
+            switch (canal){
+                case 1:
+                    System.out.println("TV SENADO");
+                    break;
+                case 2:
+                    System.out.println("TV CULTURA");
+                    break;
+                case 3:
+                    System.out.println("DISNEY");
+                    break;
+                case 4:
+                    System.out.println("SBT");
+                    break;
+                case 5:
+                    System.out.println("Globo");
+                    break;
+                default: System.out.println("Canal inválido");
+            }
+        }else {
+            System.out.println("tv desligada");
+        }
+        return canal;
+    }
+}//fecha classe tv
