@@ -1,0 +1,122 @@
+package DesafiosJavaBasico;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Mercado {
+    static Scanner scanner = new Scanner(System.in);
+    static ArrayList<String> nomeProdutos = new ArrayList<>();
+    static ArrayList<Integer> qtdProdutos = new ArrayList<>();
+    static ArrayList<Double> valorProdutos = new ArrayList<>();
+
+    public static void main(String[] args) {
+        String menu = "";
+        do {
+            System.out.println("\n====== APP MERCADO ======");
+            System.out.println("1. Adicionar / Atualizar item");
+            System.out.println("2. Consultar carrinho");
+            System.out.println("3. Excluir item");
+            System.out.println("4. Alterar quantidade");
+            System.out.println("5. Finalizar a compra");
+            System.out.print("Escolha: ");
+            menu = scanner.nextLine();
+
+            switch (menu) {
+                case "1" -> adicionaItem();
+                case "2" -> consultaCarrinho();
+                case "3" -> excluiProduto();
+                case "4" -> alteraQtdProduto();
+                case "5" -> {
+                    finalizarCompra();
+                    return; // Encerra o programa de forma limpa
+                }
+                default -> System.out.println("Opção inválida.");
+            }
+        } while (true);
+    }
+
+    public static void adicionaItem() {
+        System.out.print("Nome do produto: ");
+        String produto = scanner.nextLine().trim().toLowerCase();
+
+        // Verifica se já existe para não duplicar
+        int indiceExistente = nomeProdutos.indexOf(produto);
+
+        try {
+            System.out.print("Quantidade: ");
+            int quantidade = Integer.parseInt(scanner.nextLine());
+            System.out.print("Valor Unitário: ");
+            double valor = Double.parseDouble(scanner.nextLine());
+
+            if (quantidade <= 0 || valor <= 0) {
+                System.out.println("Erro: Valores devem ser maiores que zero.");
+                return;
+            }
+
+            if (indiceExistente != -1) {
+                // Atualiza o que já existe
+                qtdProdutos.set(indiceExistente, qtdProdutos.get(indiceExistente) + quantidade);
+                valorProdutos.set(indiceExistente, valor); // Atualiza o preço se mudou
+                System.out.println("Quantidade atualizada no produto existente!");
+            } else {
+                // Adiciona novo
+                nomeProdutos.add(produto);
+                qtdProdutos.add(quantidade);
+                valorProdutos.add(valor);
+                System.out.println("Produto adicionado com sucesso.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: Digite valores numéricos válidos.");
+        }
+    }
+
+    public static void consultaCarrinho() {
+        if (nomeProdutos.isEmpty()) {
+            System.out.println("\n[ Carrinho Vazio ]");
+            return;
+        }
+
+        System.out.println("\n--------- SEU CARRINHO ----------");
+        double totalGeral = 0;
+        for (int i = 0; i < nomeProdutos.size(); i++) {
+            double subtotal = qtdProdutos.get(i) * valorProdutos.get(i);
+            totalGeral += subtotal;
+            // Adicionei o índice (i) para facilitar a vida do usuário
+            System.out.printf("[%d] %-12s | Qtd: %d | Unit: R$%.2f | Sub: R$%.2f\n", 
+                                i, nomeProdutos.get(i), qtdProdutos.get(i), valorProdutos.get(i), subtotal);
+        }
+        System.out.println("---------------------------------");
+        System.out.printf("TOTAL ACUMULADO: R$%.2f\n", totalGeral);
+    }
+
+    public static void excluiProduto() {
+        consultaCarrinho();
+        if (nomeProdutos.isEmpty()) return;
+
+        System.out.print("Digite o número (ID) do produto para excluir: ");
+        try {
+            int id = Integer.parseInt(scanner.nextLine());
+            if (id >= 0 && id < nomeProdutos.size()) {
+                nomeProdutos.remove(id);
+                qtdProdutos.remove(id);
+                valorProdutos.remove(id);
+                System.out.println("Item removido!");
+            } else {
+                System.out.println("ID inexistente.");
+            }
+        } catch (Exception e) {
+            System.out.println("Entrada inválida.");
+        }
+    }
+
+    // ... (alteraQtdProduto seguiria a mesma lógica de usar o ID do índice)
+    
+    public static void finalizarCompra() {
+        if (nomeProdutos.isEmpty()) {
+            System.out.println("Não há itens para finalizar.");
+            return;
+        }
+        consultaCarrinho();
+        // Sua lógica de pagamento está ótima, mantenha-a!
+        System.out.println("\nObrigado por comprar conosco!");
+    }
+}
