@@ -1,0 +1,94 @@
+package DesafiosJavaBasico;
+
+import java.util.Scanner;
+
+public class Tv {
+    static Scanner scanner = new Scanner(System.in);
+    static boolean ligada = false;
+    static int volume = 10;
+    static int canal = 1;
+
+    public static void main(String[] args) {
+        int controle;
+        do {
+            limparTela(); // Para manter a interface fixa no topo
+            desenharTv();  // Desenha a TV baseada nas variáveis
+            exibirControle(); // Desenha o controle remoto com as opções
+
+            System.out.print(" Pressione um botão: ");
+            controle = scanner.nextInt();
+
+            switch (controle) {
+                case 1 -> ligar();
+                case 2 -> desligar();
+                case 3 -> aumentarVolume();
+                case 4 -> diminuirVolume();
+                case 5 -> mutar();
+                case 6 -> mudarCanal();
+            }
+        } while (controle != 0);
+    }
+
+    public static void exibirControle() {
+        System.out.println("\n      .--------.");
+        System.out.println("      | [L/D]  |  1. Ligar");
+        System.out.println("      |  [OFF] |  2. Desligar");
+        System.out.println("      |        |");
+        System.out.println("      |  [^]   |  3. Vol +");
+        System.out.println("      |  [v]   |  4. Vol -");
+        System.out.println("      |        |");
+        System.out.println("      | [1][2] |  6. Canais");
+        System.out.println("      | [3][4] |  0. Sair");
+        System.out.println("      '--------'");
+    }
+
+    public static void desenharTv() {
+        System.out.println(" _________________________");
+        System.out.println("|  _____________________  |");
+        if (ligada) {
+            System.out.printf("| | CANAL: %-13d| |\n", canal);
+            System.out.printf("| | VOL: %-15d| |\n", volume);
+        } else {
+            System.out.println("| |                     | |");
+            System.out.println("| |       ( OFF )       | |");
+        }
+        System.out.println("| |_____________________| |");
+        System.out.println("|_________________________|");
+    }
+
+    public static void limparTela() {
+        // Pula várias linhas para simular a limpeza do console
+        for (int i = 0; i < 25; i++) System.out.println();
+    }
+
+    // --- MÉTODOS DE LÓGICA ---
+
+    public static void ligar() {
+        ligada = true;
+        System.out.println("TV Ligada!");
+    }
+
+    public static void desligar() {
+        ligada = false;
+        System.out.println("TV Desligada!");
+    }
+
+    public static void aumentarVolume() {
+        if (ligada && volume < 100) volume += 5;
+    }
+
+    public static void diminuirVolume() {
+        if (ligada && volume > 0) volume -= 5;
+    }
+
+    public static void mutar() {
+        if (ligada) volume = 0;
+    }
+
+    public static void mudarCanal() {
+        if (ligada) {
+            System.out.print("Digite o canal: ");
+            canal = scanner.nextInt();
+        }
+    }
+}
