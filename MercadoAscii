@@ -1,0 +1,110 @@
+package DesafiosJavaBasico;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class MercadoVisual {
+    static Scanner scanner = new Scanner(System.in);
+    static ArrayList<String> nomeProdutos = new ArrayList<>();
+    static ArrayList<Integer> qtdProdutos = new ArrayList<>();
+    static ArrayList<Double> valorProdutos = new ArrayList<>();
+
+    public static void main(String[] args) {
+        int opcao = -1;
+
+        while (opcao != 5) {
+            limparTela();
+            exibirCabecalho();
+            exibirCarrinhoVisual(); // Aqui entra a lógica do ícone ASCII
+            exibirMenu();
+            
+            System.out.print("Selecione uma operação: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpar buffer
+
+            switch (opcao) {
+                case 1 -> adicionarItem();
+                case 2 -> consultarCarrinho();
+                case 3 -> excluirItem();
+                case 4 -> finalizarCompra();
+                case 5 -> System.out.println("Saindo... Até logo!");
+                default -> {
+                    System.out.println("Opção inválida! Pressione Enter para voltar.");
+                    scanner.nextLine();
+                }
+            }
+        }
+    }
+
+    // --- LÓGICA VISUAL (INTERFACE) ---
+
+    public static void exibirCabecalho() {
+        System.out.println("#########################################");
+        System.out.println("#       SUPERMERCADO JAVA BÁSICO        #");
+        System.out.println("#########################################");
+    }
+
+    public static void exibirCarrinhoVisual() {
+        int totalItens = 0;
+        for (int q : qtdProdutos) totalItens += q;
+
+        if (nomeProdutos.isEmpty()) {
+            System.out.println("\n      [ Carrinho Vazio ]");
+            System.out.println("             _");
+            System.out.println("            /_\\");
+            System.out.println("           |   |");
+            System.out.println("           |___|");
+        } else {
+            System.out.println("\n      [ Itens no Carrinho: " + String.format("%02d", totalItens) + " ]");
+            System.out.println("             __");
+            System.out.println("       _____|_|___");
+            System.out.println("      |_          |");
+            System.out.println("     (o)--------(o)");
+        }
+        System.out.println("-----------------------------------------");
+    }
+
+    public static void exibirMenu() {
+        System.out.println(" 1. [ + ] Adicionar Produto");
+        System.out.println(" 2. [ L ] Listar Itens");
+        System.out.println(" 3. [ X ] Remover Produto");
+        System.out.println(" 4. [ $ ] Finalizar Compra");
+        System.out.println(" 5. [ ! ] Sair");
+        System.out.println("-----------------------------------------");
+    }
+
+    public static void limparTela() {
+        // Simula a limpeza do console pulando 30 linhas
+        for (int i = 0; i < 30; i++) System.out.println();
+    }
+
+    // --- MÉTODOS DE LÓGICA (Exemplo resumido) ---
+
+    public static void adicionarItem() {
+        System.out.print("Nome do produto: ");
+        nomeProdutos.add(scanner.nextLine());
+        System.out.print("Quantidade: ");
+        qtdProdutos.add(scanner.nextInt());
+        System.out.print("Preço: ");
+        valorProdutos.add(scanner.nextDouble());
+        scanner.nextLine();
+        System.out.println("\nProduto adicionado! Pressione Enter para continuar...");
+        scanner.nextLine();
+    }
+
+    public static void consultarCarrinho() {
+        System.out.println("\n--- LISTA DE COMPRAS ---");
+        if (nomeProdutos.isEmpty()) {
+            System.out.println("Nenhum item adicionado.");
+        } else {
+            for (int i = 0; i < nomeProdutos.size(); i++) {
+                System.out.printf("%d. %-15s | Qtd: %d | R$ %.2f\n", 
+                    (i+1), nomeProdutos.get(i), qtdProdutos.get(i), valorProdutos.get(i));
+            }
+        }
+        System.out.println("\nPressione Enter para voltar ao menu...");
+        scanner.nextLine();
+    }
+
+    // Os outros métodos (excluir, finalizar) seguiriam a mesma lógica...
+}
